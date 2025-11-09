@@ -1,4 +1,4 @@
-image: pytorch/pytorch:2.2.2-cpu
+image: python 3.10
 
 stages:
   - build
