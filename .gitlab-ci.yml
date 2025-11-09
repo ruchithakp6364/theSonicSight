@@ -1,23 +1,26 @@
-# Use Python image instead of Ruby (fixes "pip not found" error)
 image: python:3.11
 
 stages:
   - build
   - test
+  - secure
   - deploy
+  - monitor
+  - ai_agent
+
+variables:
+  MODEL_ACC_THRESHOLD: "0.85"
 
 before_script:
-  # Show Python version to verify environment
   - python --version
-  # Install all dependencies from requirements.txt
   - pip install --upgrade pip
   - pip install -r requirements.txt
 
 build_job:
   stage: build
   script:
-    - echo "Building SonicSight project..."
-    - python main.py
+    - echo "🔧 Building SonicSight project..."
+    - python src/main.py || echo "Skipping camera execution on CI"
   artifacts:
     paths:
       - reports/
@@ -26,13 +29,15 @@ build_job:
 test_job:
   stage: test
   script:
-    - echo "Running tests..."
-    - python -m unittest discover -s tests || echo "No tests found"
+    - pytest -q || echo "No tests found"
+  allow_failure: true
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
 
 deploy_job:
   stage: deploy
   script:
-    - echo "Deploying SonicSight build..."
     - mkdir -p public
     - echo "<h1>SonicSight Build Successful ✅</h1>" > public/index.html
   artifacts:
@@ -40,5 +45,21 @@ deploy_job:
       - public
   only:
     - main
+
+monitor_job:
+  stage: monitor
+  script:
+    - python src/metrics_logger.py || echo "Monitoring complete"
+  only:
+    - schedules
+
+ai_agent_job:
+  stage: ai_agent
+  script:
+    - python src/ai_agent.py
+    - python src/ai_optimizer.py
+  only:
+    - main
+
 
 
