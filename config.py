@@ -1,0 +1,1 @@
+CONFIG = {'LANG': 'en', 'NEARBY_THRESHOLD_M': 2.0}

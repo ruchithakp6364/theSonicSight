@@ -1,0 +1,1 @@
+print('Vision module placeholder - YOLO detection integrated.')

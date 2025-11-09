@@ -1,0 +1,6 @@
+opencv-python-headless
+numpy
+pyttsx3
+torch
+ultralytics
+Pillow

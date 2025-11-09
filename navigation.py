@@ -1,0 +1,1 @@
+print('Navigation placeholder - handles direction + path analysis.')

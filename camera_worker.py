@@ -1,0 +1,1 @@
+print('Camera worker placeholder - video capture system.')

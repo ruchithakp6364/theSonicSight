@@ -1,0 +1,50 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  PROJECT_NAME: "SonicSight"
+
+before_script:
+  - echo "Installing dependencies..."
+  - pip install -r requirements.txt
+
+build_job:
+  stage: build
+  script:
+    - echo "Building SonicSight project..."
+    - python main.py
+  artifacts:
+    paths:
+      - reports/
+    expire_in: 1 week
+
+test_job:
+  stage: test
+  script:
+    - echo "Running tests..."
+    - python -m unittest discover -s tests
+
+deploy_job:
+  stage: deploy
+  script:
+    - echo "Deploying SonicSight build..."
+    - mkdir public
+    - echo "<h1>SonicSight Build Successful</h1>" > public/index.html
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+
+pages:
+  stage: deploy
+  script:
+    - echo "Publishing to GitLab Pages..."
+    - cp -r public/ .public
+  artifacts:
+    paths:
+      - .public
+  only:
+    - main
