@@ -20,7 +20,7 @@ build_job:
   stage: build
   script:
     - echo "🔧 Building SonicSight project..."
-    - python src/main.py || echo "Skipping camera execution on CI"
+    - python main.py || echo "Skipping camera execution on CI"
   artifacts:
     paths:
       - reports/
@@ -49,15 +49,15 @@ deploy_job:
 monitor_job:
   stage: monitor
   script:
-    - python src/metrics_logger.py || echo "Monitoring complete"
+    - python metrics_logger.py || echo "Monitoring complete"
   only:
     - schedules
 
 ai_agent_job:
   stage: ai_agent
   script:
-    - python src/ai_agent.py
-    - python src/ai_optimizer.py
+    - python ai_agent.py
+    - python ai_optimizer.py
   only:
     - main
 
