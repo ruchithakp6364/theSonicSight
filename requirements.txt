@@ -1,9 +1,8 @@
-opencv-python-headless
+torchaudio
+opencv-python
 numpy
-pyttsx3
-torch
-ultralytics
-Pillow
-pytest
+pandas
+gTTS
 requests
 openai
+ultralytics==8.3.226

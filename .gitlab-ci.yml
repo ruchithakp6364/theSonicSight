@@ -1,4 +1,4 @@
-image: python:3.10
+image: python:3.11
 
 stages:
   - build
@@ -14,7 +14,6 @@ variables:
 before_script:
   - python --version
   - pip install --upgrade pip
-  - pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu || echo "Torch skipped on Python 3.12"
   - pip install -r requirements.txt
 
 build_job:
@@ -30,7 +29,11 @@ build_job:
 test_job:
   stage: test
   script:
+    - echo "Testing SonicSight main.py execution (headless mode)..."
+    - python -c "from main import main; print('✅ main.py imported successfully')"
     - pytest -q || echo "No tests found"
+    - echo "Testing YOLOv8n integration..."
+    - python -c "from vision import detect_objects; import cv2; import numpy as np; img = np.zeros((480,640,3),dtype=np.uint8); frame, det = detect_objects(img); print('✅ Detected', len(det), 'objects')"
   allow_failure: true
 
 include:
