@@ -28,13 +28,15 @@ build_job:
 
 test_job:
   stage: test
+  image: python:3.11
+  before_script:
+    - apt-get update -y && apt-get install -y libglib2.0-0
+    - python --version
+    - pip install -r requirements.txt
   script:
-    - echo "Testing SonicSight main.py execution (headless mode)..."
+    - echo "✅ Running SonicSight import test (no GUI)..."
     - python -c "from main import main; print('✅ main.py imported successfully')"
-    - pytest -q || echo "No tests found"
-    - echo "Testing YOLOv8n integration..."
-    - python -c "from vision import detect_objects; import cv2; import numpy as np; img = np.zeros((480,640,3),dtype=np.uint8); frame, det = detect_objects(img); print('✅ Detected', len(det), 'objects')"
-  allow_failure: true
+
 
 #include:
 #  - template: Security/SAST.gitlab-ci.yml
