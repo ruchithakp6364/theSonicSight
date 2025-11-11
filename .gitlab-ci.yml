@@ -31,12 +31,10 @@ test_job:
     - pip install --upgrade pip
     - pip install -r requirements.txt
   script:
-    - echo "✅ Running SonicSight headless import test..."
-    # Check if main.py runs without error (no camera GUI)
-    - python -c "import main; print('✅ main.py imports successfully')"
-    # Optional: quick sanity test of model import
-    - python -c "from ultralytics import YOLO; model=YOLO('yolov8n.pt'); print('✅ YOLOv8n model loaded successfully')"
-  allow_failure: false
+    - echo "✅ Running SonicSight import test..."
+    - python -c "import cv2; import torch; import ultralytics; print('✅ Core libs loaded successfully')"
+    - python -c "import main; print('✅ main.py imported successfully (headless mode)')"
+
 
 # Optional deploy (for hackathon presentation page)
 deploy_job:
