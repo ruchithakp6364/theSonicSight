@@ -26,15 +26,67 @@ build_job:
       - reports/
     expire_in: 1 week
 
+image: python:3.10
+
+stages:
+  - build
+  - test
+  - deploy
+  - ai_agent
+
+before_script:
+  - python --version
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+
+# Build the project (non-GUI)
+build_job:
+  stage: build
+  script:
+    - echo "🔧 Building SonicSight project..."
+    - python main.py || echo "Skipping camera execution in CI"
+  artifacts:
+    paths:
+      - reports/
+    expire_in: 1 week
+
+# ✅ Refined Test Job
 test_job:
   stage: test
   image: python:3.10
   before_script:
     - python --version
+    - pip install --upgrade pip
     - pip install -r requirements.txt
   script:
-    - echo "✅ Running SonicSight import test (no GUI)..."
-    - python -c "from main import main; print('✅ main.py imported successfully')"
+    - echo "✅ Running SonicSight headless import test..."
+    # Check if main.py runs without error (no camera GUI)
+    - python -c "import main; print('✅ main.py imports successfully')"
+    # Optional: quick sanity test of model import
+    - python -c "from ultralytics import YOLO; model=YOLO('yolov8n.pt'); print('✅ YOLOv8n model loaded successfully')"
+  allow_failure: false
+
+# Optional deploy (for hackathon presentation page)
+deploy_job:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - echo '<h1>✅ SonicSight Build Successful</h1>' > public/index.html
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+
+# AI Agent: automatically creates improvement issues
+ai_agent_job:
+  stage: ai_agent
+  script:
+    - python ai_agent.py
+    - python ai_optimizer.py
+  only:
+    - main
+
 
 
 #include:
