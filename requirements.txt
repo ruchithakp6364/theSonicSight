@@ -1,24 +1,21 @@
-# Core AI and CV libraries
+# Use ONLY headless OpenCV (no GUI)
+opencv-python-headless==4.12.0.88
+
+# Core AI & CV
 torch>=2.0.0
 torchvision
 torchaudio
 ultralytics==8.3.226
-opencv-python-headless==4.12.0.88
 
-# Data handling
+# Other dependencies
 numpy
 pandas
 scipy
-
-# Text-to-speech
 gTTS
-
-# Communication & APIs
 requests
 openai==2.7.1
-
-# Monitoring / Visualization
 matplotlib
 psutil
+
 
 

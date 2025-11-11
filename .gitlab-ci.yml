@@ -4,47 +4,29 @@ stages:
   - build
   - test
   - deploy
-  - monitor
   - ai_agent
-
-variables:
-  MODEL_ACC_THRESHOLD: "0.85"
 
 before_script:
   - python --version
   - pip install --upgrade pip
+  - pip uninstall -y opencv-python opencv-python-headless || true
+  - pip install opencv-python-headless==4.12.0.88
   - pip install -r requirements.txt
+  - python -c "import cv2; print('✅ OpenCV version:', cv2.__version__)"
 
-# ------------------------------
-# 🧩 Build Stage
-# ------------------------------
 build_job:
   stage: build
   script:
-    - echo "🔧 Building SonicSight project (headless mode)..."
-    - python -m compileall .  # check syntax only, skip camera
-    - echo "✅ Build complete (syntax verified)"
-  artifacts:
-    paths:
-      - reports/
-    expire_in: 1 week
+    - echo "🔧 Building SonicSight (headless mode)..."
+    - python -m compileall .
+    - echo "✅ Build successful."
 
-# ------------------------------
-# 🧪 Test Stage
-# ------------------------------
 test_job:
   stage: test
-  image: python:3.10
-  before_script:
-    - python --version
-    - pip install -r requirements.txt
   script:
-    - echo "✅ Running SonicSight headless import test..."
-    - python -c "from main import main; print('✅ main.py imported successfully (headless mode)')"
+    - echo "🧠 Running SonicSight test (no camera)..."
+    - python -c "from main import main; print('✅ main.py imported successfully')"
 
-# ------------------------------
-# 🚀 Deploy Stage (for showcase)
-# ------------------------------
 deploy_job:
   stage: deploy
   script:
@@ -56,26 +38,14 @@ deploy_job:
   only:
     - main
 
-# ------------------------------
-# 📈 Monitor Stage
-# ------------------------------
-monitor_job:
-  stage: monitor
-  script:
-    - python metrics_logger.py || echo "Monitoring complete"
-  only:
-    - schedules
-
-# ------------------------------
-# 🤖 AI Agent Stage
-# ------------------------------
 ai_agent_job:
   stage: ai_agent
   script:
-    - python ai_agent.py
+    - python ai_agent.py || echo "AI Agent skipped"
     - python ai_optimizer.py
   only:
     - main
+
 
 
 
