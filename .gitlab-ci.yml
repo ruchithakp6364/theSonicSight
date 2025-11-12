@@ -9,29 +9,32 @@ stages:
 before_script:
   - python --version
   - pip install --upgrade pip
-  - pip uninstall -y opencv-python opencv-python-headless || true
+  - pip uninstall -y opencv-python || true
   - pip install opencv-python-headless==4.12.0.88
   - pip install -r requirements.txt
-  - python -c "import cv2; print('✅ OpenCV version:', cv2.__version__)"
 
 build_job:
   stage: build
   script:
-    - echo "🔧 Building SonicSight (headless mode)..."
+    - echo "🔧 Build (syntax check)..."
     - python -m compileall .
-    - echo "✅ Build successful."
+    - python -c "import cv2; print('OpenCV version:', cv2.__version__)"
+  artifacts:
+    paths:
+      - reports/
+    expire_in: 1 week
 
 test_job:
   stage: test
   script:
-    - echo "🧠 Running SonicSight test (no camera)..."
-    - python -c "from main import main; print('✅ main.py imported successfully')"
+    - echo "🧪 Import test (headless)..."
+    - python -c "from main import main; print('main imported')"
 
 deploy_job:
   stage: deploy
   script:
     - mkdir -p public
-    - echo "<h1>SonicSight Build Successful ✅</h1>" > public/index.html
+    - echo "<h1>SonicSight Build Successful (headless)</h1>" > public/index.html
   artifacts:
     paths:
       - public
@@ -41,13 +44,6 @@ deploy_job:
 ai_agent_job:
   stage: ai_agent
   script:
-    - python ai_agent.py || echo "AI Agent skipped"
-    - python ai_optimizer.py
+    - python ai_agent.py || echo "AI agent skipped"
   only:
     - main
-
-
-
-
-
-
