@@ -1,5 +1,5 @@
 # Use ONLY headless OpenCV (no GUI)
-opencv-python-headless==4.12.0.88
+opencv-python==4.12.0.88; platform_system=="Windows"
 
 # Core AI & CV
 torch>=2.0.0
