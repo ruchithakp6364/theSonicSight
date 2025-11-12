@@ -1,4 +1,4 @@
-image: python:3.10
+image: registry.gitlab.com/ruchithakp6364/sonicsight:ci
 
 stages:
   - build
