@@ -1,0 +1,49 @@
+image: registry.gitlab.com/ruchithakp6364/sonicsight:ci
+
+stages:
+  - build
+  - test
+  - deploy
+  - ai_agent
+
+before_script:
+  - python --version
+  - pip install --upgrade pip
+  - pip uninstall -y opencv-python || true
+  - pip install opencv-python-headless==4.12.0.88
+  - pip install -r requirements.txt
+
+build_job:
+  stage: build
+  script:
+    - echo "🔧 Build (syntax check)..."
+    - python -m compileall .
+    - python -c "import cv2; print('OpenCV version:', cv2.__version__)"
+  artifacts:
+    paths:
+      - reports/
+    expire_in: 1 week
+
+test_job:
+  stage: test
+  script:
+    - echo "🧪 Import test (headless)..."
+    - python -c "from main import main; print('main imported')"
+
+deploy_job:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - echo "<h1>SonicSight Build Successful (headless)</h1>" > public/index.html
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+
+ai_agent_job:
+  stage: ai_agent
+  script:
+    - python ai_agent.py || echo "AI agent skipped"
+  only:
+    - main
