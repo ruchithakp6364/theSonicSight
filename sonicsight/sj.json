@@ -1,0 +1,7 @@
+{
+    "library": { "x": 0, "y": 10 },
+    "cafeteria": { "x": 5, "y": 15 },
+    "admin_block": { "x": -3, "y": 12 },
+    "seminar_hall": { "x": 2, "y": 20 },
+    "hostel": { "x": -6, "y": 18 }
+}
