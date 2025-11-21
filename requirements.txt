@@ -2,9 +2,15 @@
 opencv-python==4.12.0.88; platform_system=="Windows"
 
 # Core AI & CV
+<<<<<<< HEAD
 torch==2.2.0+cpu
 torchaudio==2.2.0+cpu
 torchvision==0.17.0+cpu
+=======
+torch>=2.0.0
+torchvision
+torchaudio
+>>>>>>> 8b326622491b207bebc9f4e595b98dce21954163
 ultralytics==8.3.226
 
 # Other dependencies
@@ -17,7 +23,11 @@ openai==2.7.1
 matplotlib
 psutil
 pyttsx3
+<<<<<<< HEAD
 pyaudio
 speechrecognition
+=======
+
+>>>>>>> 8b326622491b207bebc9f4e595b98dce21954163
 
 
