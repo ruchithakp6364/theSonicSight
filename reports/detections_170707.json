@@ -1,0 +1,22 @@
+[
+    {
+        "label": "person",
+        "confidence": 0.87,
+        "bbox": [
+            198,
+            269,
+            450,
+            478
+        ]
+    },
+    {
+        "label": "person",
+        "confidence": 0.65,
+        "bbox": [
+            423,
+            359,
+            637,
+            479
+        ]
+    }
+]

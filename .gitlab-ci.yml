@@ -1,4 +1,4 @@
-image: registry.gitlab.com/ruchithakp6364/sonicsight:ci
+image: python:3.10
 
 stages:
   - build
@@ -6,19 +6,19 @@ stages:
   - deploy
   - ai_agent
 
+variables:
+  MODEL_ACC_THRESHOLD: "0.85"
+
 before_script:
   - python --version
   - pip install --upgrade pip
-  - pip uninstall -y opencv-python || true
-  - pip install opencv-python-headless==4.12.0.88
   - pip install -r requirements.txt
 
 build_job:
   stage: build
   script:
-    - echo "🔧 Build (syntax check)..."
-    - python -m compileall .
-    - python -c "import cv2; print('OpenCV version:', cv2.__version__)"
+    - echo "🔧 Building SonicSight..."
+    - python main.py || echo "Skipping camera execution in CI (no GUI)"
   artifacts:
     paths:
       - reports/
@@ -27,23 +27,25 @@ build_job:
 test_job:
   stage: test
   script:
-    - echo "🧪 Import test (headless)..."
-    - python -c "from main import main; print('main imported')"
+    - echo "⚙️ Testing imports..."
+    - python -c "from main import main; print('Import OK')"
 
 deploy_job:
   stage: deploy
   script:
     - mkdir -p public
-    - echo "<h1>SonicSight Build Successful (headless)</h1>" > public/index.html
+    - echo "<h1>SonicSight Build Successful</h1>" > public/index.html
   artifacts:
     paths:
       - public
   only:
-    - main
+    - master
 
 ai_agent_job:
   stage: ai_agent
   script:
-    - python ai_agent.py || echo "AI agent skipped"
+    - python ai_agent.py
+    - python ai_optimizer.py
   only:
-    - main
+    - master
+

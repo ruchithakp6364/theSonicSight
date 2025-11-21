@@ -1,0 +1,12 @@
+[
+    {
+        "label": "cell phone",
+        "confidence": 0.7,
+        "bbox": [
+            335,
+            216,
+            390,
+            299
+        ]
+    }
+]

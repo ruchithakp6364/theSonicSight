@@ -1,0 +1,22 @@
+[
+    {
+        "label": "cell phone",
+        "confidence": 0.79,
+        "bbox": [
+            262,
+            330,
+            394,
+            478
+        ]
+    },
+    {
+        "label": "person",
+        "confidence": 0.79,
+        "bbox": [
+            208,
+            134,
+            602,
+            477
+        ]
+    }
+]
