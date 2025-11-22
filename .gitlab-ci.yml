@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 image: python:3.10
-=======
-image: registry.gitlab.com/ruchithakp6364/sonicsight:ci
->>>>>>> 8b326622491b207bebc9f4e595b98dce21954163
 
 stages:
   - build
@@ -10,33 +6,20 @@ stages:
   - deploy
   - ai_agent
 
-<<<<<<< HEAD
-variables:
-  MODEL_ACC_THRESHOLD: "0.85"
-
 before_script:
   - python --version
   - pip install --upgrade pip
-=======
-before_script:
-  - python --version
-  - pip install --upgrade pip
+  # Ensure no GUI OpenCV is installed
   - pip uninstall -y opencv-python || true
   - pip install opencv-python-headless==4.12.0.88
->>>>>>> 8b326622491b207bebc9f4e595b98dce21954163
   - pip install -r requirements.txt
 
 build_job:
   stage: build
   script:
-<<<<<<< HEAD
-    - echo "🔧 Building SonicSight..."
-    - python main.py || echo "Skipping camera execution in CI (no GUI)"
-=======
     - echo "🔧 Build (syntax check)..."
     - python -m compileall .
     - python -c "import cv2; print('OpenCV version:', cv2.__version__)"
->>>>>>> 8b326622491b207bebc9f4e595b98dce21954163
   artifacts:
     paths:
       - reports/
@@ -45,44 +28,23 @@ build_job:
 test_job:
   stage: test
   script:
-<<<<<<< HEAD
-    - echo "⚙️ Testing imports..."
-    - python -c "from main import main; print('Import OK')"
-=======
     - echo "🧪 Import test (headless)..."
-    - python -c "from main import main; print('main imported')"
->>>>>>> 8b326622491b207bebc9f4e595b98dce21954163
+    - python -c "from main import main; print('main imported successfully')"
 
 deploy_job:
   stage: deploy
   script:
     - mkdir -p public
-<<<<<<< HEAD
-    - echo "<h1>SonicSight Build Successful</h1>" > public/index.html
-=======
     - echo "<h1>SonicSight Build Successful (headless)</h1>" > public/index.html
->>>>>>> 8b326622491b207bebc9f4e595b98dce21954163
   artifacts:
     paths:
       - public
   only:
-<<<<<<< HEAD
-    - master
-=======
     - main
->>>>>>> 8b326622491b207bebc9f4e595b98dce21954163
 
 ai_agent_job:
   stage: ai_agent
   script:
-<<<<<<< HEAD
-    - python ai_agent.py
-    - python ai_optimizer.py
-  only:
-    - master
-
-=======
     - python ai_agent.py || echo "AI agent skipped"
   only:
     - main
->>>>>>> 8b326622491b207bebc9f4e595b98dce21954163
