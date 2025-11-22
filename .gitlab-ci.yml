@@ -48,3 +48,4 @@ ai_agent_job:
     - python ai_agent.py || echo "AI agent skipped"
   only:
     - main
+
