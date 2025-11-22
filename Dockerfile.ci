@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
     espeak \
     ffmpeg \
+    alsa-utils \
+    libasound2 \
     portaudio19-dev \
     && rm -rf /var/lib/apt/lists/*
 
