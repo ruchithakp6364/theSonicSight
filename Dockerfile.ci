@@ -1,51 +1,28 @@
-<<<<<<< HEAD
 # ===========================
-# SonicSight Custom CI Image
+# SonicSight AI Docker Image
 # ===========================
 
 FROM python:3.10
 
-# Install system dependencies required for OpenCV + pyttsx3
+# Install system dependencies required for OpenCV + pyttsx3 + audio
 RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
     espeak \
     ffmpeg \
+    portaudio19-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install project dependencies
+# Upgrade pip
 RUN python -m pip install --upgrade pip
-RUN pip install opencv-python-headless==4.12.0.88 pyttsx3==2.90 playsound==1.3.0 numpy==1.26.4
 
-# Copy your source code (optional)
-WORKDIR /workspace
-COPY . /workspace
+# Install Python requirements
+COPY requirements.txt /tmp/req.txt
+RUN pip install -r /tmp/req.txt
 
-# Simple verification command when running interactively
-CMD ["python", "-c", "import cv2, pyttsx3; print('cv2', cv2.__version__); print('pyttsx3 ok')"]
-=======
-# ===========================
-# SonicSight Custom CI Image
-# ===========================
+# Copy source code
+WORKDIR /app
+COPY . /app
 
-FROM python:3.10
-
-# Install system dependencies required for OpenCV + pyttsx3
-RUN apt-get update && apt-get install -y \
-    libgl1 \
-    libglib2.0-0 \
-    espeak \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
-
-# Upgrade pip and install project dependencies
-RUN python -m pip install --upgrade pip
-RUN pip install opencv-python-headless==4.12.0.88 pyttsx3==2.90 playsound==1.3.0 numpy==1.26.4
-
-# Copy your source code (optional)
-WORKDIR /workspace
-COPY . /workspace
-
-# Simple verification command when running interactively
-CMD ["python", "-c", "import cv2, pyttsx3; print('cv2', cv2.__version__); print('pyttsx3 ok')"]
->>>>>>> 8b326622491b207bebc9f4e595b98dce21954163
+# Default command — Verifies imports
+CMD ["python", "-c", "import cv2, pyttsx3; print('cv2 OK:', cv2.__version__); print('pyttsx3 OK')"]

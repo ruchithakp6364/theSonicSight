@@ -17,12 +17,12 @@ except ImportError as e:
     print("💡 Try installing 'opencv-python-headless' for CI environments.")
     cv2 = None
 
-from sonic.vision import detect_objects
-from sonic.feedback import speak_alert
-from sonic.navigation import calculate_ttc, update_navigation_state
-from sonic.sensor_fusion import fuse_data
-from sonic.imu_handler import read_imu_data
-from sonic.camera_worker import get_camera
+from vision import detect_objects
+from feedback import speak_alert
+from navigation import calculate_ttc, update_navigation_state
+from sensor_fusion import fuse_data
+from imu_handler import read_imu_data
+from camera_worker import get_camera
 
 # NEW import
 from voice_command import listen_for_destination
