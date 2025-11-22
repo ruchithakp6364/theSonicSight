@@ -1,5 +1,5 @@
 import time
-from sonicsight.path_analyzer import predict_safe_path
+from sonic.path_analyzer import predict_safe_path
 
 # Simulated coordinates
 current_position = [0, 0]
