@@ -1,13 +1,13 @@
 import os
 import requests
-import openai
+from openai import OpenAI
 
 # 🧠 Environment Variables
 project_id = os.getenv("CI_PROJECT_ID")
 token = os.getenv("GITLAB_TOKEN")
 commit_msg = os.getenv("CI_COMMIT_MESSAGE", "No commit message provided")
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # 🧠 AI Prompt
 prompt = f"""
@@ -17,12 +17,12 @@ Suggest one meaningful code or architecture improvement in one short paragraph.
 """
 
 # 🤖 Get AI Suggestion
-response = openai.ChatCompletion.create(
+response = client.chat.completions.create(
     model="gpt-4o-mini",
     messages=[{"role": "system", "content": prompt}]
 )
 
-suggestion = response["choices"][0]["message"]["content"]
+suggestion = response.choices[0].message.content
 print("AI Suggestion:", suggestion)
 
 # 🧾 Create GitLab Issue
@@ -41,4 +41,3 @@ try:
         print(f"⚠️ Failed to create issue: {res.status_code} - {res.text}")
 except Exception as e:
     print("❌ Error creating issue:", e)
-
