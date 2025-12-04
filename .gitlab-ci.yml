@@ -1,4 +1,4 @@
-image: python:3.10
+image: ubuntu:22.04
 
 stages:
   - build
@@ -7,22 +7,18 @@ stages:
   - ai_agent
 
 before_script:
-  - python --version
-  - pip install --upgrade pip
-  # Ensure no GUI OpenCV is installed
-  - pip uninstall -y opencv-python || true
-  - pip install opencv-python-headless==4.12.0.88
-  - pip install -r requirements.txt
+  - apt-get update
+  - apt-get install -y python3.10 python3-pip libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 libgomp1 libgthread-2.0-0
+  - python3 --version
+  - pip3 install --upgrade pip
+  - pip3 install --no-cache-dir -r requirements.txt
 
 build_job:
   stage: build
   script:
     - echo "🔧 Build (syntax check)..."
-    - python -m compileall .
-    - pip uninstall -y opencv-python || true
-    - pip install opencv-python-headless==4.12.0.88
-    - pip install -r requirements.txt
-    - python -c "import cv2; print('OpenCV version:', cv2.__version__)"
+    - python3 -m compileall .
+    - python3 -c "import cv2; print('OpenCV version:', cv2.__version__)"
   artifacts:
     paths:
       - reports/
@@ -31,14 +27,14 @@ build_job:
 test_job:
   stage: test
   script:
-    - echo "🧪 Import test (headless)..."
-    - python -c "from main import main; print('main imported successfully')"
+    - echo "🧪 Import test..."
+    - python3 -c "from main import main; print('main imported successfully')"
 
 deploy_job:
   stage: deploy
   script:
     - mkdir -p public
-    - echo "<h1>SonicSight Build Successful (headless)</h1>" > public/index.html
+    - echo "<h1>SonicSight Build Successful</h1>" > public/index.html
   artifacts:
     paths:
       - public
@@ -48,7 +44,6 @@ deploy_job:
 ai_agent_job:
   stage: ai_agent
   script:
-    - python ai_agent.py || echo "AI agent skipped"
+    - python3 ai_agent.py || echo "AI agent skipped"
   only:
     - main
-
