@@ -19,6 +19,8 @@ build_job:
   script:
     - echo "🔧 Build (syntax check)..."
     - python -m compileall .
+    - sudo apt-get update
+    - sudo apt-get install -y libgl1-mesa-glx libglib2.0-0
     - python -c "import cv2; print('OpenCV version:', cv2.__version__)"
   artifacts:
     paths:
